@@ -5,12 +5,8 @@ class Neuron():
         self.ForwardPropagatorNodes = {}
 
     def Activate(Weight):
-        for i in ForwardPropagatorNodes
+        for i in ForwardPropagatorNodes:
             ForwardPropagarorNodes[i].Activate(Weight+ForwardPropagatorWeights[i])
-
-class InputNeuron(Neuron):
-    def __init__(self,AssignedNumber):
-        
     
 class OutputNeuron(Neuron):
     def __init__(self,AssignedNumber):
