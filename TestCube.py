@@ -35,6 +35,8 @@ NewCube.RotateYellowFaceRight()
 NewCube.Print()
 
 print()
+print(NewCube.GetNumSolvedElements())
+print()
 
 NewCube.RotateGreenFaceLeft()
 NewCube.RotateGreenFaceLeft()
@@ -57,6 +59,9 @@ NewCube.RotateYellowFaceLeft()
 NewCube.Print()
 
 print()
+print(NewCube.GetNumSolvedElements())
 
-NewCube.ScrambleCube(20)
+print()
+
+NewCube.ScrambleCube(25)
 NewCube.Print()

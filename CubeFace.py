@@ -46,10 +46,15 @@ class CubeFace():
         print(self.FaceContents[0])
         print(self.FaceContents[1])
         print(self.FaceContents[2])
-    def GetNumSolvedElements():
+    def GetNumSolvedElements(self):
         NumSolved = 0
         for i in range(3):
             for j in range (3):
-                if self.FaceContents[i][j] = self.GetCenterColor():
+                if self.FaceContents[i][j] == self.GetCenterColor():
                     NumSolved+=1
         return NumSolved
+
+    def ReturnInputNeuronsToActivate():
+        InputNeuronIDs=[]
+        
+        return InputNeuronIDs
