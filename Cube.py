@@ -256,3 +256,16 @@ class Cube():
         return (self.RedFace.GetNumSolvedElements()+self.BlueFace.GetNumSolvedElements()
                 +self.WhiteFace.GetNumSolvedElements()+self.GreenFace.GetNumSolvedElements()
                 +self.OrangeFace.GetNumSolvedElements()+self.YellowFace.GetNumSolvedElements())
+
+    def GetInputNeuronsToActivate(self):
+        InputNeurons = []
+        InputNeurons = InputNeurons + self.RedFace.ReturnInputNeuronsToActivate()
+        InputNeurons = InputNeurons + self.BlueFace.ReturnInputNeuronsToActivate()
+        InputNeurons = InputNeurons + self.WhiteFace.ReturnInputNeuronsToActivate()
+        InputNeurons = InputNeurons + self.GreenFace.ReturnInputNeuronsToActivate()
+        InputNeurons = InputNeurons + self.OrangeFace.ReturnInputNeuronsToActivate()
+        InputNeurons = InputNeurons + self.YellowFace.ReturnInputNeuronsToActivate()
+        return InputNeurons
+
+    def IsNotSolved(self):
+        return (self.GetNumSolvedElements != 54)

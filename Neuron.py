@@ -4,13 +4,15 @@ class Neuron():
         self.ForwardPropagatorWeights = {}
         self.ForwardPropagatorNodes = {}
 
-    def Activate(Weight):
-        for i in ForwardPropagatorNodes:
-            ForwardPropagarorNodes[i].Activate(Weight+ForwardPropagatorWeights[i])
+    def Activate(self,Weight):
+        for i in self.ForwardPropagatorNodes:
+            self.ForwardPropagatorNodes[i].Activate(Weight+self.ForwardPropagatorWeights[i])
     
 class OutputNeuron(Neuron):
     def __init__(self,AssignedNumber):
         self.IDNumber=AssignedNumber
         self.AccumulatedWeight = 0
-    def Activate(Weight):
-        AccumulatedWeight+=Weight
+    def Activate(self,Weight):
+        self.AccumulatedWeight+=Weight
+    def Clear(self):
+        self.AccumulatedWeight = 0
