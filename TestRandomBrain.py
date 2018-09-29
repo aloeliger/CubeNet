@@ -4,8 +4,9 @@ from Brain import Brain
 NewCube = Cube()
 NewBrain = Brain()
 
-#We have nothing to go on so we just implement a bunch of random layer neurons
-NewBrain.InitializeRandomLayerNeurons()
+#We have nothing to go on so we just implement a random brain
+#let's start with a simple test 1 layer, 40 neurons
+NewBrain.InitializeRandomLayerNeurons(1,40)
 
 NewCube.ScrambleCube(20)
 
@@ -45,7 +46,7 @@ for Moves in range(0,10):
         NewCube.RotateOrangeFaceLeft()
     elif HighestOutputNeuron == 11:
         NewCube.RotateYellowFaceRight()
-    elif Turn == 12:
+    elif HighestOutputNeuron == 12:
         NewCube.RotateYellowFaceLeft()
     print("Leaves us with cube:")
     print()

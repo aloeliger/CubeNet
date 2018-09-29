@@ -52,18 +52,20 @@ if __name__=="__main__":
     NewBrains = []
     for i in range(0,10):
         NewBrains.append(Brain())
-        NewBrains[i].InitializeRandomLayerNeurons()
+        #try brains with 2 neuron layers, 40 neurons 
+        NewBrains[i].InitializeRandomLayerNeurons(2,40)
     #okay, let each brain try and solve a hundred scrambled cubes
+    HighestFitness = 0
     for i in range(0,10):
+        print("Testing Brain: "+str(i))
         Fitness = 0
-        HighestFitness = 0
         BestBrain = 0
         for j in range(0,100):
             NewCube = Cube()
             NewCube.ScrambleCube(20)
             Fitness+=AttemptSolve(NewCube,NewBrains[i])
-        print("Cube "+str(i)+" Overall Fitness: "+str(Fitness))
-        print("Cube "+str(i)+" Average Fitness: "+str(Fitness/100.0))
+        print("Brain "+str(i)+" Overall Fitness: "+str(Fitness))
+        print("Brain "+str(i)+" Average Fitness: "+str(Fitness/100.0))
         if(Fitness > HighestFitness):
             HighestFitness = Fitness
             BestBrain = i
