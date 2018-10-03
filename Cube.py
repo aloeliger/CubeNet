@@ -269,3 +269,31 @@ class Cube():
 
     def IsNotSolved(self):
         return (self.GetNumSolvedElements != 54)
+
+    def PerformPredeterminedScramble(self,TheScramble):
+        for Turn in TheScramble:
+            if Turn == 1:
+                self.RotateWhiteFaceRight()
+            elif Turn == 2:
+                self.RotateWhiteFaceLeft()
+            elif Turn == 3:
+                self.RotateRedFaceRight()
+            elif Turn == 4:
+                self.RotateRedFaceLeft()
+            elif Turn == 5:
+                self.RotateBlueFaceRight()
+            elif Turn == 6:
+                self.RotateBlueFaceLeft()
+            elif Turn == 7:
+                self.RotateGreenFaceRight()
+            elif Turn == 8:
+                self.RotateGreenFaceLeft()
+            elif Turn == 9:
+                self.RotateOrangeFaceRight()
+            elif Turn == 10:
+                self.RotateOrangeFaceLeft()
+            elif Turn == 11:
+                self.RotateYellowFaceRight()
+            elif Turn == 12:
+                self.RotateYellowFaceLeft()
+        

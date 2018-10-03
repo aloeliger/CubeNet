@@ -7,6 +7,8 @@ class Brain():
         self.ResetInputNeurons()
         self.ResetOutputNeurons()
         self.LayerNodes = {}
+        self.LayerList = []
+        self.Fitness = 0
     #neuron ID's 111-966 are reserved for input neurons
     #Special mapping will tell what each neuron is.
     def ResetInputNeurons(self):
@@ -53,6 +55,8 @@ class Brain():
                 for NeuronID in NeuronsToAdd:
                     PreviousNeuronLayer[PreviousNeuronID].ForwardPropagatorNodes[NeuronID] = CurrentLayerNeurons[NeuronID]
                     PreviousNeuronLayer[PreviousNeuronID].ForwardPropagatorWeights[NeuronID] = random.randint(-2,2)
+            #Make sure the brain keeps tabs on the layers
+            self.LayerList.append(PreviousNeuronLayer)
             PreviousNeuronLayer = CurrentLayerNeurons
             CurrentLayerNeurons = {}
         # hook up next-to-last layer and output neurons.
@@ -66,7 +70,9 @@ class Brain():
             if(not IsConnectedInLayer(PreviousNeuronLayer,OutputNeuronID)):
                 PreviousNeuronID = random.choice(list(PreviousNeuronLayer.keys()))
                 PreviousNeuronLayer[PreviousNeuronID].ForwardPropagatorNodes[OutputNeuronID] = self.OutputNeurons[OutputNeuronID]
-                PreviousNeuronLayer[PreviousNeuronID].ForwardPropagatorWeights[OutputNeuronID] = random.randint(-2,2)        
+                PreviousNeuronLayer[PreviousNeuronID].ForwardPropagatorWeights[OutputNeuronID] = random.randint(-2,2)
+        self.LayerList.append(PreviousNeuronLayer)
+        self.LayerList.append(self.OutputNeurons)
                 
     def GetHighestOutputNeuron(self):
         HighestNeuronID = 1
@@ -81,12 +87,68 @@ class Brain():
 
     #okay, how do we modify the brain?
     #options:
-    #1.) Take the best brain, copy it, with random modifications.
+    #1.) Take the best brain(s), copy it/them, with random modifications.
     #2.) Take the two best brains. find a way to cross the weights/genomes.
     #        -Add in random mutations at points to keep the process moving forward.
     #3.) Others?
     #We'll start with the easiest to implement: 1.)
-    #def MutateBrain(self):
+    def MutateBrain(self):
+        #okay, approximately 3 things can happen.
+        #we can change the weights of some of the forward neuron connections <- start with this
+        #we can add entirely new neurons and connections 
+        #we can take neurons out.
+        #start with the input neurons
+        for InputNeuronID in list(self.InputNeurons.keys()):
+            if (random.randint(0,100) == 0):
+                NumOfReweightedNeurons = random.randint(1,len(list(self.InputNeurons[InputNeuronID].ForwardPropagatorWeights.keys())))
+                NeuronIDsToReweight = random.sample(list(self.InputNeurons[InputNeuronID].ForwardPropagatorWeights.keys()),NumOfReweightedNeurons)
+                for ID in NeuronIDsToReweight:
+                    self.InputNeurons[InputNeuronID].ForwardPropagatorWeights[ID] = random.randint(-2,2)
+        #do the same thing with layer neurons
+        for LayerNeuronID in list(self.LayerNodes.keys()):
+            if (random.randint(0,100) == 0):
+                NumOfReweightedNeurons = random.randint(1,len(list(self.LayerNodes[LayerNeuronID].ForwardPropagatorWeights.keys())))
+                NeuronIDsToReweight = random.sample(list(self.LayerNodes[LayerNeuronID].ForwardPropagatorWeights.keys()),NumOfReweightedNeurons)
+                for ID in NeuronIDsToReweight:
+                    self.LayerNodes[LayerNeuronID].ForwardPropagatorWeights[ID] = random.randint(-2,2)
+        #Implement the adding of neurons and connections. Make this much rarer
+        if(random.randint(0,40)==0):
+            self.AddRandomConnection()
+        if(random.randint(0,80)==0):
+            self.AddRandomNeuron()
+        #implement the removal of connections and neurons. Make this even rarer than addition
+        #we would like the brain to tend towards complexity.
+
+    def AddRandomConnection(self):
+        Layer = random.randint(0,len(self.LayerList)-2)
+        NeuronID = random.choice(list(self.LayerList[Layer].keys()))
+        FarEndNeuronID = random.choice(list(self.LayerList[Layer+1].keys()))
+        self.LayerList[Layer][NeuronID].ForwardPropagatorNodes[FarEndNeuronID]=self.LayerList[Layer+1][FarEndNeuronID]
+        self.LayerList[Layer][NeuronID].ForwardPropagatorWeights[FarEndNeuronID]=random.randint(-2,2)
+
+    def RemoveRandomConnection(self):
+        return 0
+    
+    def AddRandomNeuron(self):
+        #add the neuron anywhere but the output or input layers.
+        Layer = random.randint(1,len(self.LayerList)-2)
+        NeuronID = max(list(self.LayerNodes.keys()))+1
+        NewNeuron = Neuron(NeuronID)
+        #archive the new neuron
+        self.LayerNodes[NeuronID]=NewNeuron
+        self.LayerList[Layer][NeuronID]=NewNeuron
+        #Setup connections to the new neuron
+        PreviousNeuronID = random.choice(list(self.LayerList[Layer-1].keys()))
+        self.LayerList[Layer-1][PreviousNeuronID].ForwardPropagatorNodes[NeuronID]=NewNeuron
+        self.LayerList[Layer-1][PreviousNeuronID].ForwardPropagatorWeights[NeuronID]=random.randint(-2,2)
+        ForwardNeuronID = random.choice(list(self.LayerList[Layer+1].keys()))
+        NewNeuron.ForwardPropagatorNodes[ForwardNeuronID]=self.LayerList[Layer+1][ForwardNeuronID]
+        NewNeuron.ForwardPropagatorWeights[ForwardNeuronID] = random.randint(-2,2)
+    def RemoveRandomNeuron(self):
+        return 0
+
+    def GetFitness(self):
+        return self.Fitness
 
 # a helper function that doesn't really need to be a part of the class?
 #Takes the previous Layer Dictionary, and a urrent layer ID number

@@ -1,5 +1,6 @@
 from Cube import Cube
 from Brain import Brain
+from copy import deepcopy
 #attempts a solve, and returns the fitness of the solve
 def AttemptSolve(TheCube,TheBrain):
     Moves = 0
@@ -56,10 +57,10 @@ if __name__=="__main__":
         NewBrains[i].InitializeRandomLayerNeurons(2,40)
     #okay, let each brain try and solve a hundred scrambled cubes
     HighestFitness = 0
+    BestBrain = 0
     for i in range(0,10):
         print("Testing Brain: "+str(i))
         Fitness = 0
-        BestBrain = 0
         for j in range(0,100):
             NewCube = Cube()
             NewCube.ScrambleCube(20)
@@ -71,4 +72,29 @@ if __name__=="__main__":
             BestBrain = i
     print("Best Fitness: "+str(HighestFitness))
     print("Best Brain: "+str(BestBrain))
-    
+    #copy the best brain
+    GenTwoBrains = []
+    for i in range(0,10):
+        GenTwoBrains.append(deepcopy(NewBrains[BestBrain]))
+        GenTwoBrains[i].MutateBrain()
+    print()
+    print("Testing Second Generation!")
+    print()
+
+    HighestFitness = 0
+    BestBrain = 0
+    for i in range(0,10):
+        print("Testing Brain: "+str(i))
+        Fitness = 0
+        BestBrain = 0
+        for j in range(0,100):
+            NewCube = Cube()
+            NewCube.ScrambleCube(20)
+            Fitness+=AttemptSolve(NewCube,GenTwoBrains[i])
+        print("Brain "+str(i)+" Overall Fitness: "+str(Fitness))
+        print("Brain "+str(i)+" Average Fitness: "+str(Fitness/100.0))
+        if(Fitness > HighestFitness):
+            HighestFitness = Fitness
+            BestBrain = i
+    print("Best Fitness: "+str(HighestFitness))
+    print("Best Brain: "+str(BestBrain))
